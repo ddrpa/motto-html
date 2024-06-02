@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8"/>
+  <title>个人安全培训信息档案</title>
+  <style>
+    * {
+      font-family: 'Noto Serif SC', 'Arial', sans-serif;
+    }
+
+    @page {
+      /*size: A4 landscape;*/
+      size: A5 portrait;
+    }
+
+    body {
+      font-size: 80%;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table, th, td {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+<h1>个人安全培训信息档案</h1>
+<table style="border-bottom: none">
+  <tr>
+    <td>姓名</td>
+    <td>$name</td>
+    <td>身份证号码</td>
+    <td>$idCard</td>
+    <td rowspan="5">
+      <img src="$avatar" media="print" width="64px" height="64px"></img>
+    </td>
+  </tr>
+  <tr>
+    <td>人员类别</td>
+    <td>$category</td>
+    <td>职务/岗位</td>
+    <td>$position</td>
+  </tr>
+  <tr>
+    <td>学历</td>
+    <td>$education</td>
+    <td>专业</td>
+    <td>$major</td>
+  </tr>
+  <tr>
+    <td rowspan="2">工作单位</td>
+    <td colspan="3">单位名称：$company</td>
+  </tr>
+  <tr>
+    <td colspan="3">社会信用代码：$companyCode</td>
+  </tr>
+</table>
+<table style="border-top: none">
+  <tr>
+    <td colspan="5">培训学时明细</td>
+  </tr>
+  <tr>
+    <td>序号</td>
+    <td>课程名称</td>
+    <td>培训方式</td>
+    <td>学时</td>
+    <td>成绩</td>
+  </tr>
+  #foreach( $course_record in $all_course_records )
+  <tr>
+    <td>$course_record.id()</td>
+    <td>$course_record.course()</td>
+    <td>$course_record.trainingMethod()</td>
+    <td>$course_record.trainingHours()</td>
+    <td>$course_record.score()</td>
+  </tr>
+  #end
+</table>
+<input type="text" name="text-input" value="123"/>
+<input type="checkbox" name="checkbox-checked" checked="checked"/>
+<input type="checkbox" name="checkbox-unchecked"/>
+<input type="radio" name="radio-input"/>
+</body>
+</html>
