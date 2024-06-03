@@ -42,10 +42,8 @@
   </properties>
 
   <scm>
-    <!-- FIXME change it to the project's actual scm info -->
     <connection>scm:git:git://github.com/ddrpa/motto-html.git</connection>
-    <developerConnection>scm:git:ssh://github.com:ddrpa/motto-html.git
-    </developerConnection>
+    <developerConnection>scm:git:ssh://github.com:ddrpa/motto-html.git</developerConnection>
     <url>https://github.com/ddrpa/motto-html/tree/master</url>
   </scm>
 
