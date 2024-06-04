@@ -28,12 +28,33 @@ flowchart LR
 静态方法 `cc.ddrpa.motto.html.DocumentBuilder#addFont` 接受字体文件路径输入。在 HTML
 中声明字体样式时，应当使用程序返回的字体名称。
 
+```java
+DocumentBuilder.addFont("font-seems-okay/Noto_Sans_SC/static/NotoSansSC-Regular.ttf");
+```
+
 ### 怎样生成文件
 
 创建一个 `cc.ddrpa.motto.html.DocumentBuilder` 对象并通过 `loadTemplate`
 或 `loadTemplateFromPlainText` 方法以文件路径或模版字符串载入 Apache Velocity 模版。
 
+```
+DocumentBuilder builder = new DocumentBuilder()
+    .loadTemplate("src/test/resources/record-template.html");
+```
+
 调用 `DocumentBuilder#merge` 方法添加数据，这个步骤可以重复多次。
+
+```
+builder.merge(Map.of(
+  "name", faker.name().fullName(),
+   "idCard", faker.idNumber().invalidSvSeSsn(),
+   "category", "吃瓜群众",
+   "records", List.of(
+      new CourseRecord(1, "课程名称1", "培训策略1", 11, 100),
+      new CourseRecord(2, "课程名称2", "培训策略2", 22, 98),
+      new CourseRecord(3,
+      // ... 
+```
 
 调用 `DocumentBuilder#save` 向给定的输出流保存 PDF 文件。
 
@@ -48,6 +69,10 @@ builder，然后从调用 `DocumentBuilder#merge` 方法重新开始。
 可以写成 `<img src="resources://avatar.jpg" >`。
 
 不过需注意图片会按其原始大小被嵌入文件，所以你可能会想要将其压缩后再插入文档。这时可以用 `cc.ddrpa.motto.html.embedded.EmbeddedImage`。
+
+```
+EmbeddedImage resizedImage = EmbeddedImage.newInstance(fis, EmbeddedResource.JPEG, 8, 8);
+```
 
 ![showcase](showcase.png)
 
