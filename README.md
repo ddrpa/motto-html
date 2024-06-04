@@ -23,14 +23,14 @@ flowchart LR
 如果不想添加什么额外的字体，可以设置中文文本的 `font-family` 属性为 `STSong-Light-H`
 或 `STSongStd-Light-H`。这两种字体的显示效果是比较细的无衬线字体。
 
-#### 给前端同学的注意事项：
+#### 注意事项
 
 - CSS 选择器支持有限，` < `可能会无法识别，推荐使用内联样式；
 - Flying Saucer 少量支持 CSS 3 功能，主要集中在页面控制方面，Flexible Box Layout 这种还没有；
 - 尽管 `<img>` 这类标签支持自闭合，请使用 `<img></img>` 形式；
 - 字体（`font-family`）必须在一个指定的范围内选择，例如 `STSong/STSongStd`，Noto 系列，以及其他版权所有方允许自由使用的字体，例如[寒蝉字型](https://github.com/Warren2060)等。同样，如果输出文件中没有出现字符，请在 DOM 元素上内联添加 `font-family`；
 - 请把 `<style>` 标签放在 `<head>` 里，不要放在 `<body>` 中或之后；
-- DocumentBuilder 默认的设置是 1 Pixel = 20 Dots，1 Point = 26.6667 Dots，印刷方面的东西还是有一些门槛的，没指望人人都弄懂，所以请多用 <kbd>Ctrl</kbd> + <kbd>P</kbd> 或 <kbd>Cmd</kbd> + <kbd>P</kbd> 预览效果，而不是使用 DevTools；
+- DocumentBuilder 使用了 Flying Saucer  的默认设置，即 1 Pixel = 20 Dots，1 Point = 26.6667 Dots。印刷方面的东西还是有一些门槛的，所以请多用 <kbd>Ctrl</kbd> + <kbd>P</kbd> 或 <kbd>Cmd</kbd> + <kbd>P</kbd> 预览效果，而不是使用 DevTools；
 
 ### 怎样添加字体
 
