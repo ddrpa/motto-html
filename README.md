@@ -12,7 +12,7 @@ flowchart LR
 
 ## 使用方法
 
-在 `pom.xml` 中添加依赖，最新版本应该是 `cc.ddrpa.motto:motto-html:1.0.0`。
+在 `pom.xml` 中添加依赖，最新版本应该是 `cc.ddrpa.motto:motto-html:1.1.0`。
 
 你可以查看本项目的单元测试了解用法。
 
@@ -23,14 +23,29 @@ flowchart LR
 如果不想添加什么额外的字体，可以设置中文文本的 `font-family` 属性为 `STSong-Light-H`
 或 `STSongStd-Light-H`。这两种字体的显示效果是比较细的无衬线字体。
 
-#### 注意事项
+Flying Saucer 支持了一小部分 CSS3 的特性，例如页面控制。可以在 HTML 文档中指定样式：
 
-- CSS 选择器支持有限，` < `可能会无法识别，推荐使用内联样式；
-- Flying Saucer 少量支持 CSS 3 功能，主要集中在页面控制方面，Flexible Box Layout 这种还没有；
-- 尽管 `<img>` 这类标签支持自闭合，请使用 `<img></img>` 形式；
-- 字体（`font-family`）必须在一个指定的范围内选择，例如 `STSong/STSongStd`，Noto 系列，以及其他版权所有方允许自由使用的字体，例如[寒蝉字型](https://github.com/Warren2060)等。同样，如果输出文件中没有出现字符，请在 DOM 元素上内联添加 `font-family`；
-- 请把 `<style>` 标签放在 `<head>` 里，不要放在 `<body>` 中或之后；
-- DocumentBuilder 使用了 Flying Saucer  的默认设置，即 1 Pixel = 20 Dots，1 Point = 26.6667 Dots。印刷方面的东西还是有一些门槛的，所以请多用 <kbd>Ctrl</kbd> + <kbd>P</kbd> 或 <kbd>Cmd</kbd> + <kbd>P</kbd> 预览效果，而不是使用 DevTools；
+```css
+@page {
+  /* A4 大小，竖版 */
+  size: A4 portrait;
+  /* 或者横版 size: A4 landscape;*/
+  /* 用 margin 指定页边距也是支持的 */
+}
+```
+
+你可以参考 [How do you control page size?](https://flyingsaucerproject.github.io/flyingsaucer/r8/guide/users-guide-R8.html#xil_34)，对手动分页等内容也做了详细的说明。
+
+此外，在创建模版时还需要注意：
+
+- 模板样式应当遵循 [Cascading Style Sheets Level 2 Revision 1 (CSS 2.1) Specification](https://www.w3.org/TR/CSS21/)；
+- 尽管 `<img>` 这类标签支持自闭合，请使用 `<img></img>`；
+- 使用 `pt` 设置图像元素的尺寸，特别是在使用了 `EmbeddedImage#setDevicePixelRatio` 的情况下；
+- 设置字体族（`font-family`）时，首选项必须是 `STSong/STSongStd` 或其他预先部署到服务器环境并由程序显式读取的字体；
+- 观察到 `E > F` 这种 Child selectors 在某些情况下似乎没有正确的应用 `font-family` 属性，因此如果输出文件中没有出现字符，请在 DOM 元素上通过内联样式设置 `font-family`；
+- 请把 `<style>` 标签放在 `<head>` 里，不要放在 `<body>` 之中或之后；
+- 请使用 <kbd>Ctrl</kbd> + <kbd>P</kbd> 或 <kbd>Cmd</kbd> + <kbd>P</kbd> 预览效果，而不是 DevTools；
+- 不要尝试在模版内使用 JavaScript；
 
 ### 怎样添加字体
 
@@ -79,9 +94,15 @@ builder，然后从调用 `DocumentBuilder#merge` 方法重新开始。
 
 不过需注意图片会按其原始大小被嵌入文件，所以你可能会想要将其压缩后再插入文档。这时可以用 `cc.ddrpa.motto.html.embedded.EmbeddedImage`。
 
+```java
+EmbeddedImage compressed = EmbeddedImage.newInstance(fis)
+    .setDotsPerPoint(dotsPerPoint)
+    .setDotsPerPixel(dotsPerPixel)
+    .setDevicePixelRatio(devicePixelRatio)
+    .scaleWithPoint(228, 128);
 ```
-EmbeddedImage resizedImage = EmbeddedImage.newInstance(fis, EmbeddedResource.JPEG, 8, 8);
-```
+
+如果你修改了 `devicePixelRatio`，请在模版中使用 `pt` 限制图像元素的大小。
 
 ![showcase](showcase.png)
 

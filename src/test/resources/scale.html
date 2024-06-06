@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>
+    @page {
+      margin: 0 0;
+      padding: 0 0;
+      size: A4 portrait;
+    }
+
+    p {
+      font-family: 'STSong-Light-H';
+    }
+
+    img {
+      margin: 10pt
+    }
+  </style>
+</head>
+
+<body>
+<div>
+  <p>缩放</p>
+  <img src="${COMPRESSED}"></img>
+  <p>原始文件</p>
+  <img style="width: 228pt; height: 128pt;" src="${ORIGINAL}"></img>
+  <p>DPR = 2</p>
+  <img style="width: 228pt; height: 128pt;" src="${COMPRESSED_DPR_2}"></img>
+  <p>DPR = 4</p>
+  <img style="width: 228pt; height: 128pt;" src="${COMPRESSED_DPR_4}"></img>
+  <p>DPR = 8</p>
+  <img style="width: 228pt; height: 128pt;" src="${COMPRESSED_DPR_8}"></img>
+</div>
+</body>
+</html>

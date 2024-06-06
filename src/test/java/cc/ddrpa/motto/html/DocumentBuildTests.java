@@ -1,7 +1,6 @@
 package cc.ddrpa.motto.html;
 
 import cc.ddrpa.motto.html.embedded.EmbeddedImage;
-import cc.ddrpa.motto.html.embedded.EmbeddedResource;
 import com.github.javafaker.Faker;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -62,7 +61,7 @@ public class DocumentBuildTests {
                 EmbeddedImage image;
                 try (FileInputStream fis = new FileInputStream("src/test/resources/avatar.jpeg")) {
                     // 由于图片在生成文件中的视觉尺寸已经被 CSS 样式确定，将其缩放为 8x8 的资源会使产物可见地模糊
-                    image = EmbeddedImage.newInstance(fis, EmbeddedResource.JPEG, 8, 8);
+                    image = EmbeddedImage.newInstance(fis);
                     builder.merge("avatar", image);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
