@@ -63,7 +63,7 @@ DocumentBuilder.addFont("font-seems-okay/Noto_Sans_SC/static/NotoSansSC-Regular.
 
 ```
 DocumentBuilder builder = new DocumentBuilder()
-    .loadTemplate("src/test/resources/record-template.html");
+    .loadTemplate("record-template.html");
 ```
 
 调用 `DocumentBuilder#merge` 方法添加数据，这个步骤可以重复多次。

@@ -44,7 +44,7 @@ public class DocumentBuildTests {
         });
 
         DocumentBuilder builder = new DocumentBuilder()
-            .loadTemplate("src/test/resources/record-template.html");
+            .loadTemplate("record-template.html");
 
         IntStream.range(1, 4).forEach(index -> {
             builder.merge(

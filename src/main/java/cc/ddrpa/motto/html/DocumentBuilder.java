@@ -2,6 +2,8 @@ package cc.ddrpa.motto.html;
 
 import com.lowagie.text.pdf.BaseFont;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -10,9 +12,13 @@ import java.util.Map;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.exception.ParseErrorException;
+import org.apache.velocity.exception.ResourceNotFoundException;
+import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.RuntimeServices;
 import org.apache.velocity.runtime.RuntimeSingleton;
 import org.apache.velocity.runtime.parser.ParseException;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xhtmlrenderer.pdf.CJKFontResolver;
@@ -30,6 +36,9 @@ public class DocumentBuilder {
 
     static {
         velocityEngine = new VelocityEngine();
+        velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADERS, "classpath");
+        velocityEngine.setProperty("resource.loader.classpath.class",
+            ClasspathResourceLoader.class.getName());
         velocityEngine.init();
         runtimeServices = RuntimeSingleton.getRuntimeServices();
     }
@@ -62,6 +71,8 @@ public class DocumentBuilder {
 
     /**
      * 注册字体
+     * <p>
+     * 不同于模版，字体文件一般较大，不建议打包到 jar 包中，所以这里使用外部文件路径加载字体
      *
      * @param fontFilePath 字体文件路径
      * @throws IOException
@@ -80,13 +91,40 @@ public class DocumentBuilder {
     }
 
     /**
-     * 从文件加载模版
+     * 使用 classpath 中的文件路径加载模版
+     * <p>
+     * 现版本设置了基于 classpath 的资源加载器，所以文件路径是相对于 classpath 的，
+     * 作者还没有想到更好的方法允许调用者修改成别的方法。如果文件存储在 classpath 之外，
+     * 请使用 {@link #loadTemplateFromStream(InputStream)} 或
+     * {@link #loadTemplateFromPlainText(String)} 方法。
      *
-     * @param templateFilePath 模版的文件路径
+     * @param templateFileClassPath 模版的文件路径
      * @return
+     * @throws ResourceNotFoundException
+     * @throws ParseErrorException
      */
-    public DocumentBuilder loadTemplate(String templateFilePath) {
-        template = velocityEngine.getTemplate(templateFilePath);
+    public DocumentBuilder loadTemplate(String templateFileClassPath)
+        throws ResourceNotFoundException, ParseErrorException {
+        template = velocityEngine.getTemplate(templateFileClassPath);
+        return this;
+    }
+
+    /**
+     * 从输入流加载模版
+     *
+     * @param inputStream 包含模版内容的输入流
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
+    public DocumentBuilder loadTemplateFromStream(InputStream inputStream)
+        throws IOException, ParseException {
+        template = new Template();
+        template.setRuntimeServices(runtimeServices);
+        try (InputStreamReader reader = new InputStreamReader(inputStream)) {
+            template.setData(runtimeServices.parse(reader, template));
+        }
+        template.initDocument();
         return this;
     }
 

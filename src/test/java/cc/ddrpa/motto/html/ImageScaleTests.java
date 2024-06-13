@@ -29,7 +29,7 @@ public class ImageScaleTests {
         ITextOutputDevice iTextOutputDevice = new ITextOutputDevice(dotsPerPoint);
         DocumentBuilder builder = new DocumentBuilder(dotsPerPoint, dotsPerPixel, iTextOutputDevice,
             new ResourcesUserAgent(iTextOutputDevice, dotsPerPixel));
-        builder.loadTemplate("src/test/resources/scale.html");
+        builder.loadTemplate("scale.html");
         try (FileInputStream fis = new FileInputStream("src/test/resources/large-photo.jpeg")) {
             EmbeddedImage original = EmbeddedImage.newInstance(fis);
             logImageSize(original);

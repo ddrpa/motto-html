@@ -56,7 +56,7 @@ public class GenerateFontBookTests {
             }
         });
         DocumentBuilder builder = new DocumentBuilder();
-        builder.loadTemplate("src/test/resources/cjk-fonts.html");
+        builder.loadTemplate("cjk-fonts.html");
         builder.merge(Map.of(
             "font_families",
             DocumentBuilder.listFontFamily()
