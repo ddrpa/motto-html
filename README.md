@@ -12,7 +12,7 @@ flowchart LR
 
 ## 使用方法
 
-在 `pom.xml` 中添加依赖，最新版本应该是 `cc.ddrpa.motto:motto-html:1.1.0`。
+在 `pom.xml` 中添加依赖 `cc.ddrpa.motto:motto-html:1.2.0`，可以在 [central.sonatype.com](https://central.sonatype.com/artifact/cc.ddrpa.motto/motto-html) 查询最新版本。
 
 你可以查看本项目的单元测试了解用法。
 
