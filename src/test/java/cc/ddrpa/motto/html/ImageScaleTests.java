@@ -13,8 +13,6 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 public class ImageScaleTests {
 
     private static final Logger logger = LoggerFactory.getLogger(ImageScaleTests.class);
-//    private final float dotsPerPoint = 4f/3f; // ITextRenderer.DEFAULT_DOTS_PER_POINT;
-//    private final int dotsPerPixel = 1; //ITextRenderer.DEFAULT_DOTS_PER_PIXEL;
     private final float dotsPerPoint = ITextRenderer.DEFAULT_DOTS_PER_POINT;
     private final int dotsPerPixel =  ITextRenderer.DEFAULT_DOTS_PER_PIXEL;
 

@@ -26,19 +26,12 @@ public class EmbeddedImage {
     private int devicePixelRatio;
     private BufferedImage image;
 
-    private EmbeddedImage(BufferedImage image) {
-        this.image = image;
-        this.dotsPerPoint = DEFAULT_DOTS_PER_POINT;
-        this.dotsPerPixel = DEFAULT_DOTS_PER_PIXEL;
-        this.devicePixelRatio = DEFAULT_DEVICE_PIXEL_RATIO;
-    }
-
     private EmbeddedImage(BufferedImage image, float dotsPerPoint, int dotsPerPixel,
         int devicePixelRatio) {
-        this.image = image;
         this.dotsPerPoint = dotsPerPoint;
         this.dotsPerPixel = dotsPerPixel;
         this.devicePixelRatio = devicePixelRatio;
+        this.image = image;
     }
 
     /**
@@ -77,7 +70,10 @@ public class EmbeddedImage {
      */
     public static EmbeddedImage newInstance(InputStream inputStream) throws IOException {
         BufferedImage image = ImageIO.read(inputStream);
-        return new EmbeddedImage(image);
+        return new EmbeddedImage(image,
+            DEFAULT_DOTS_PER_POINT,
+            DEFAULT_DOTS_PER_PIXEL,
+            DEFAULT_DEVICE_PIXEL_RATIO);
     }
 
     /**
@@ -87,7 +83,10 @@ public class EmbeddedImage {
      * @return instance of {@link EmbeddedImage}
      */
     public static EmbeddedImage newInstance(BufferedImage bufferedImage) {
-        return new EmbeddedImage(bufferedImage);
+        return new EmbeddedImage(bufferedImage,
+            DEFAULT_DOTS_PER_POINT,
+            DEFAULT_DOTS_PER_PIXEL,
+            DEFAULT_DEVICE_PIXEL_RATIO);
     }
 
     /**
@@ -128,8 +127,7 @@ public class EmbeddedImage {
     /**
      * 设置设备像素比
      * <p>
-     * 指定图像大小缩放为为某一具体数值时，通过这个数值获得比预定尺寸大得多的图像，再通过 CSS 样式进行控制，
-     * 获得更精细的图像
+     * 指定图像大小缩放为为某一具体数值时，通过这个数值获得比预定尺寸大得多的图像，再通过 CSS 样式进行控制， 获得更精细的图像
      *
      * @param devicePixelRatio
      * @return instance of {@link EmbeddedImage}
@@ -169,9 +167,18 @@ public class EmbeddedImage {
      */
     public String toDataURL() throws IOException {
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
-            ImageIO.write(this.image, "jpeg", bos);
-            return String.format("data:image/jpeg;base64,%s", Base64.getEncoder()
-                .encodeToString(bos.toByteArray()));
+            // 含有 alpha 通道的图像在 ImageIO JPG Writer 中可能会导致异常行为
+            // 见 https://web.archive.org/web/20150522182756/https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4836466
+            // 考虑到确实有可能存在对 alpha 通道的需求，这里分别按照两种格式输出
+            if (image.getColorModel().hasAlpha()) {
+                ImageIO.write(this.image, "png", bos);
+                return String.format("data:image/png;base64,%s", Base64.getEncoder()
+                    .encodeToString(bos.toByteArray()));
+            } else {
+                ImageIO.write(this.image, "jpeg", bos);
+                return String.format("data:image/jpeg;base64,%s", Base64.getEncoder()
+                    .encodeToString(bos.toByteArray()));
+            }
         }
     }
 
@@ -223,7 +230,17 @@ public class EmbeddedImage {
      */
     @Deprecated
     public void exportAsJPEG(OutputStream outputStream) throws IOException {
-        ImageIO.write(this.image, "jpeg", outputStream);
+        // 含有 alpha 通道的图像在 ImageIO JPG Writer 中可能会导致异常行为
+        // 见 https://web.archive.org/web/20150522182756/https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4836466
+        // 一种方法是通过转换去除 alpha 通道
+        if (image.getColorModel().hasAlpha()) {
+            BufferedImage newBufferedImage = new BufferedImage(image.getWidth(), image.getHeight(),
+                BufferedImage.TYPE_INT_RGB);
+            newBufferedImage.createGraphics().drawImage(image, 0, 0, null);
+            ImageIO.write(newBufferedImage, "jpeg", outputStream);
+        } else {
+            ImageIO.write(this.image, "jpeg", outputStream);
+        }
     }
 
     /**
