@@ -7,8 +7,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -82,6 +86,47 @@ public class DocumentBuilder {
     }
 
     /**
+     * 查找当前系统的字体目录，将找到的字体假定为 CJK 字体加载
+     *
+     * @return 载入成功的字体
+     */
+    public static List<String> loadPreinstalledFontsAsCJKFont() {
+        List<String> loaded = new ArrayList<>(10);
+        List<Path> preInstallFontDirs = PathResolver.preinstalledFontPaths();
+        for (Path path : preInstallFontDirs) {
+            Stream<Path> pathStream;
+            try {
+                pathStream = Files.walk(path);
+            } catch (IOException ignored) {
+                logger.warn("Failed to walk through directory {} because {}", path,
+                    ignored.getMessage());
+                continue;
+            }
+            List<Path> files = pathStream
+                .filter(Files::isRegularFile)
+                .filter(file -> {
+                    String fileName = file.toString().toLowerCase();
+                    return fileName.endsWith(".ttf")
+                        || fileName.endsWith(".otf")
+                        || fileName.endsWith(".ttc");
+                })
+                .toList();
+            for (Path file : files) {
+                try {
+                    fontResolver.addFont(file.toString(), BaseFont.IDENTITY_H,
+                        BaseFont.EMBEDDED);
+                    loaded.add(file.toString());
+                } catch (Exception ignored) {
+                    logger.warn(
+                        "Failed to load preinstalled font from directory {} because {}", path,
+                        ignored.getMessage());
+                }
+            }
+        }
+        return loaded;
+    }
+
+    /**
      * 获取已注册的字体，可以在作为模版的 HTML 中设置元素的 font-family 属性为列表中的值
      *
      * @return list of font family
@@ -93,9 +138,8 @@ public class DocumentBuilder {
     /**
      * 使用 classpath 中的文件路径加载模版
      * <p>
-     * 现版本设置了基于 classpath 的资源加载器，所以文件路径是相对于 classpath 的，
-     * 作者还没有想到更好的方法允许调用者修改成别的方法。如果文件存储在 classpath 之外，
-     * 请使用 {@link #loadTemplateFromStream(InputStream)} 或
+     * 现版本设置了基于 classpath 的资源加载器，所以文件路径是相对于 classpath 的，作者还没有想到更好的方法允许调用者修改成别的方法。如果文件存储在 classpath
+     * 之外，请使用 {@link #loadTemplateFromStream(InputStream)} 或
      * {@link #loadTemplateFromPlainText(String)} 方法。
      *
      * @param templateFileClassPath 模版的文件路径
