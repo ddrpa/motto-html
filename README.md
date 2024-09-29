@@ -49,6 +49,8 @@ Flying Saucer 支持了一小部分 CSS3 的特性，例如页面控制。可以
 
 ### 怎样添加字体
 
+1.2.2 中增加了 `cc.ddrpa.motto.html.DocumentBuilder#loadPreinstalledFontsAsCJKFont` 静态方法，可以加载用户或系统目录下预装的字体，方法会返回成功加载的字体路径。这些字体会按照 CJK 字体来加载，因此可能产生意料之外的问题，可以执行 `cc.ddrpa.motto.html.LoadPreInstalledFontsTests` 预览效果。
+
 静态方法 `cc.ddrpa.motto.html.DocumentBuilder#addFont` 接受字体文件路径输入。在 HTML
 中声明字体样式时，应当使用程序返回的字体名称。
 
