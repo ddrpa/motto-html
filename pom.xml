@@ -34,7 +34,7 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <flying-saucer.version>9.8.0</flying-saucer.version>
-    <commons-lang3.version>3.14.0</commons-lang3.version>
+    <commons-lang3.version>3.18.0</commons-lang3.version>
     <junit.version>5.10.1</junit.version>
     <slf4j.version>2.0.13</slf4j.version>
     <velocity.version>2.3</velocity.version>
