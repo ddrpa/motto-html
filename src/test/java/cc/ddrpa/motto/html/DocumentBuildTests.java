@@ -1,6 +1,7 @@
 package cc.ddrpa.motto.html;
 
 import cc.ddrpa.motto.html.embedded.EmbeddedImage;
+import cc.ddrpa.motto.html.support.CourseRecord;
 import net.datafaker.Faker;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;

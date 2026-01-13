@@ -17,6 +17,9 @@ class GenerateFontBookTests {
 
     private static final Logger logger = LoggerFactory.getLogger(GenerateFontBookTests.class);
 
+    /**
+     * 这些是授权字体，因此不能随项目分发
+     */
     private static final List<String> FONTS_MAY_HAVE_LICENSE_ISSUE = List.of(
             "/Users/yufan/Library/Fonts/HanaMinA.ttf",
             "/Users/yufan/Downloads/SIMSUN.TTC,0",

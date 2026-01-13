@@ -1,4 +1,4 @@
-package cc.ddrpa.motto.html;
+package cc.ddrpa.motto.html.support;
 
 public record CourseRecord(
         int id,

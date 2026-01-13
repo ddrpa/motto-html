@@ -50,7 +50,6 @@ public class DocumentBuilder {
     private VelocityContext velocityContext = new VelocityContext();
     private Template template;
 
-
     public DocumentBuilder() {
         this.dotsPerPoint = ITextRenderer.DEFAULT_DOTS_PER_POINT;
         this.dotsPerPixel = ITextRenderer.DEFAULT_DOTS_PER_PIXEL;
@@ -60,9 +59,9 @@ public class DocumentBuilder {
     }
 
     public DocumentBuilder(float dotsPerPoint,
-                           int dotsPerPixel,
-                           ITextOutputDevice iTextOutputDevice,
-                           ITextUserAgent iTextUserAgent) {
+            int dotsPerPixel,
+            ITextOutputDevice iTextOutputDevice,
+            ITextUserAgent iTextUserAgent) {
         this.dotsPerPoint = dotsPerPoint;
         this.dotsPerPixel = dotsPerPixel;
         this.iTextOutputDevice = iTextOutputDevice;
@@ -102,6 +101,10 @@ public class DocumentBuilder {
                     .filter(Files::isRegularFile)
                     .filter(file -> {
                         String fileName = file.toString().toLowerCase();
+                        // 排除可变字体（Variable Font）
+                        if (fileName.contains("-vf.")) {
+                            return false;
+                        }
                         return fileName.endsWith(".ttf")
                                 || fileName.endsWith(".otf")
                                 || fileName.endsWith(".ttc");
@@ -134,7 +137,8 @@ public class DocumentBuilder {
     /**
      * 使用 classpath 中的文件路径加载模版
      * <p>
-     * 现版本设置了基于 classpath 的资源加载器，所以文件路径是相对于 classpath 的，作者还没有想到更好的方法允许调用者修改成别的方法。如果文件存储在 classpath
+     * 现版本设置了基于 classpath 的资源加载器，所以文件路径是相对于 classpath
+     * 的，作者还没有想到更好的方法允许调用者修改成别的方法。如果文件存储在 classpath
      * 之外，请使用 {@link #loadTemplateFromStream(InputStream)} 或
      * {@link #loadTemplateFromPlainText(String)} 方法。
      *
