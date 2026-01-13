@@ -70,7 +70,7 @@ try (FileOutputStream fos = new FileOutputStream("output.pdf")) {
 
 模版文件使用 Apache Velocity 语法。有关 Velocity 模版语言的详细信息，请参阅 [Apache Velocity 用户指南](https://velocity.apache.org/engine/2.3/user-guide.html)。
 
-模版样式必须遵循 [CSS 2.1 规范](https://www.w3.org/TR/CSS21/)。Flying Saucer 渲染器支持部分 CSS3 特性，包括页面控制属性。
+模版样式必须遵循 [CSS 2.1 规范](https://www.w3.org/TR/CSS21/)，Flying Saucer 渲染器能够支持部分 CSS3 特性，包括页面控制属性，除此之外可能需要自行测试。
 
 ```css
 @page {
@@ -87,7 +87,7 @@ try (FileOutputStream fos = new FileOutputStream("output.pdf")) {
 
 - 模板样式应当遵循 [Cascading Style Sheets Level 2 Revision 1 (CSS 2.1) Specification](https://www.w3.org/TR/CSS21/)；
 - 尽管 `<img>` 这类标签支持自闭合，请使用 `<img></img>`；
-- 使用 `pt` 设置图像元素的尺寸，特别是在使用了 `EmbeddedImage#setDevicePixelRatio` 的情况下；
+- 使用 `pt` 设置尺寸，特别是在使用了 `EmbeddedImage#setDevicePixelRatio` 处理图片的情况下；
 - 设置字体族（`font-family`）时，首选项必须是 `STSong/STSongStd` 或其他预先部署到服务器环境并由程序显式读取的字体；
 - 观察到 `E > F` 这种 Child selectors 在某些情况下似乎没有正确的应用 `font-family` 属性，因此如果输出文件中没有出现字符，请在 DOM 元素上通过内联样式设置 `font-family`；
 - 请把 `<style>` 标签放在 `<head>` 里，不要放在 `<body>` 之中或之后；
