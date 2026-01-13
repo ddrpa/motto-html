@@ -170,11 +170,13 @@ ResourcesUserAgent userAgent = new ResourcesUserAgent(outputDevice, dotsPerPixel
 对于需要压缩或调整尺寸的图片，使用 `cc.ddrpa.motto.html.embedded.EmbeddedImage` 类：
 
 ```java
-EmbeddedImage image = EmbeddedImage.newInstance(inputStream)
-    .setDevicePixelRatio(2)
-    .scaleWithPoint(200, 100);
+EmbeddedImage compressed = EmbeddedImage.newInstance(fis)
+    .setDotsPerPoint(dotsPerPoint)
+    .setDotsPerPixel(dotsPerPixel)
+    .setDevicePixelRatio(devicePixelRatio)
+    .scaleWithPoint(228, 128);
 
-builder.merge("avatar", image);
+builder.merge("image-preview", compressed);
 ```
 
 在模版中引用：
