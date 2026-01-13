@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class LoadPreInstalledFontsTests {
+class LoadPreInstalledFontsTests {
 
     private static final Logger logger = LoggerFactory.getLogger(LoadPreInstalledFontsTests.class);
 

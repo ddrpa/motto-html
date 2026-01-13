@@ -8,7 +8,7 @@ import java.util.Base64;
 import javax.imageio.ImageIO;
 import org.junit.jupiter.api.Test;
 
-public class BufferedImageReadTests {
+class BufferedImageReadTests {
 
     @Test
     void readPNGAndWriteJPEGShouldExportEmptyImageTest() throws IOException {

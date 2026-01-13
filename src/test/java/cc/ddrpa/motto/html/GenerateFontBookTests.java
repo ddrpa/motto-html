@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 展示中文字体效果
  */
-public class GenerateFontBookTests {
+class GenerateFontBookTests {
 
     private static final Logger logger = LoggerFactory.getLogger(GenerateFontBookTests.class);
 

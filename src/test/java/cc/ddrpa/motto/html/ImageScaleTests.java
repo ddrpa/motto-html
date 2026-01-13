@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.xhtmlrenderer.pdf.ITextOutputDevice;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
-public class ImageScaleTests {
+class ImageScaleTests {
 
     private static final Logger logger = LoggerFactory.getLogger(ImageScaleTests.class);
     private final float dotsPerPoint = ITextRenderer.DEFAULT_DOTS_PER_POINT;

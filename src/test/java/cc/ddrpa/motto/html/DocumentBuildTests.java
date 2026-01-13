@@ -1,13 +1,14 @@
 package cc.ddrpa.motto.html;
 
 import cc.ddrpa.motto.html.embedded.EmbeddedImage;
-import com.github.javafaker.Faker;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
+
+import net.datafaker.Faker;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,10 +16,10 @@ import org.slf4j.LoggerFactory;
 /**
  * 展示批量创建 PDF 文档的方法
  */
-public class DocumentBuildTests {
+class DocumentBuildTests {
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentBuildTests.class);
-    private final static Faker faker = new Faker();
+    private static final Faker faker = new Faker();
 
     private static final List<String> FONTS_THAT_IS_OK_TO_USE = List.of(
         "font-seems-okay/Noto_Sans_SC/static/NotoSansSC-Regular.ttf",
