@@ -1,12 +1,13 @@
 package cc.ddrpa.motto.html;
 
+import org.junit.jupiter.api.Test;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
-import javax.imageio.ImageIO;
-import org.junit.jupiter.api.Test;
 
 class BufferedImageReadTests {
 
@@ -14,7 +15,7 @@ class BufferedImageReadTests {
     void readPNGAndWriteJPEGShouldExportEmptyImageTest() throws IOException {
         // read image as stream
         InputStream im = this.getClass().getClassLoader()
-            .getResourceAsStream("rhodes.png");
+                .getResourceAsStream("rhodes.png");
         BufferedImage bufferedImage = ImageIO.read(im);
         // write to JPEG file
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -26,11 +27,11 @@ class BufferedImageReadTests {
     void readPNGAndWriteJPEGWithAlphaChannelProcessedTest() throws IOException {
         // read image as stream
         InputStream im = this.getClass().getClassLoader()
-            .getResourceAsStream("rhodes.png");
+                .getResourceAsStream("rhodes.png");
         BufferedImage bufferedImage = ImageIO.read(im);
         if (bufferedImage.getColorModel().hasAlpha()) {
             BufferedImage newBufferedImage = new BufferedImage(bufferedImage.getWidth(),
-                bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
+                    bufferedImage.getHeight(), BufferedImage.TYPE_INT_RGB);
             newBufferedImage.createGraphics().drawImage(bufferedImage, 0, 0, null);
             bufferedImage = newBufferedImage;
         }
@@ -44,7 +45,7 @@ class BufferedImageReadTests {
     void readJPEGAndWritePNGTest() throws IOException {
         // read image as stream
         InputStream im = this.getClass().getClassLoader()
-            .getResourceAsStream("another-avatar.jpeg");
+                .getResourceAsStream("another-avatar.jpeg");
         BufferedImage bufferedImage = ImageIO.read(im);
         // write to JPEG file
         ByteArrayOutputStream bos = new ByteArrayOutputStream();

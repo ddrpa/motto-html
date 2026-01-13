@@ -1,18 +1,6 @@
 package cc.ddrpa.motto.html;
 
 import com.lowagie.text.pdf.BaseFont;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Stream;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -30,6 +18,14 @@ import org.xhtmlrenderer.pdf.ITextOutputDevice;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 import org.xhtmlrenderer.pdf.ITextUserAgent;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
 public class DocumentBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentBuilder.class);
@@ -42,7 +38,7 @@ public class DocumentBuilder {
         velocityEngine = new VelocityEngine();
         velocityEngine.setProperty(RuntimeConstants.RESOURCE_LOADERS, "classpath");
         velocityEngine.setProperty("resource.loader.classpath.class",
-            ClasspathResourceLoader.class.getName());
+                ClasspathResourceLoader.class.getName());
         velocityEngine.init();
         runtimeServices = RuntimeSingleton.getRuntimeServices();
     }
@@ -60,13 +56,13 @@ public class DocumentBuilder {
         this.dotsPerPixel = ITextRenderer.DEFAULT_DOTS_PER_PIXEL;
         this.iTextOutputDevice = new ITextOutputDevice(ITextRenderer.DEFAULT_DOTS_PER_POINT);
         this.iTextUserAgent = new ResourcesUserAgent(iTextOutputDevice,
-            ITextRenderer.DEFAULT_DOTS_PER_PIXEL);
+                ITextRenderer.DEFAULT_DOTS_PER_PIXEL);
     }
 
     public DocumentBuilder(float dotsPerPoint,
-        int dotsPerPixel,
-        ITextOutputDevice iTextOutputDevice,
-        ITextUserAgent iTextUserAgent) {
+                           int dotsPerPixel,
+                           ITextOutputDevice iTextOutputDevice,
+                           ITextUserAgent iTextUserAgent) {
         this.dotsPerPoint = dotsPerPoint;
         this.dotsPerPixel = dotsPerPixel;
         this.iTextOutputDevice = iTextOutputDevice;
@@ -99,27 +95,27 @@ public class DocumentBuilder {
                 pathStream = Files.walk(path);
             } catch (IOException ignored) {
                 logger.warn("Failed to walk through directory {} because {}", path,
-                    ignored.getMessage());
+                        ignored.getMessage());
                 continue;
             }
             List<Path> files = pathStream
-                .filter(Files::isRegularFile)
-                .filter(file -> {
-                    String fileName = file.toString().toLowerCase();
-                    return fileName.endsWith(".ttf")
-                        || fileName.endsWith(".otf")
-                        || fileName.endsWith(".ttc");
-                })
-                .toList();
+                    .filter(Files::isRegularFile)
+                    .filter(file -> {
+                        String fileName = file.toString().toLowerCase();
+                        return fileName.endsWith(".ttf")
+                                || fileName.endsWith(".otf")
+                                || fileName.endsWith(".ttc");
+                    })
+                    .toList();
             for (Path file : files) {
                 try {
                     fontResolver.addFont(file.toString(), BaseFont.IDENTITY_H,
-                        BaseFont.EMBEDDED);
+                            BaseFont.EMBEDDED);
                     loaded.add(file.toString());
                 } catch (Exception ignored) {
                     logger.warn(
-                        "Failed to load preinstalled font from directory {} because {}", path,
-                        ignored.getMessage());
+                            "Failed to load preinstalled font from directory {} because {}", path,
+                            ignored.getMessage());
                 }
             }
         }
@@ -148,7 +144,7 @@ public class DocumentBuilder {
      * @throws ParseErrorException
      */
     public DocumentBuilder loadTemplate(String templateFileClassPath)
-        throws ResourceNotFoundException, ParseErrorException {
+            throws ResourceNotFoundException, ParseErrorException {
         template = velocityEngine.getTemplate(templateFileClassPath);
         return this;
     }
@@ -162,7 +158,7 @@ public class DocumentBuilder {
      * @throws ParseException
      */
     public DocumentBuilder loadTemplateFromStream(InputStream inputStream)
-        throws IOException, ParseException {
+            throws IOException, ParseException {
         template = new Template();
         template.setRuntimeServices(runtimeServices);
         try (InputStreamReader reader = new InputStreamReader(inputStream)) {
@@ -223,7 +219,7 @@ public class DocumentBuilder {
      */
     public DocumentBuilder save(OutputStream outputStream) {
         ITextRenderer renderer = new ITextRenderer(dotsPerPoint, dotsPerPixel, iTextOutputDevice,
-            iTextUserAgent, fontResolver);
+                iTextUserAgent, fontResolver);
         StringWriter stringWriter = new StringWriter();
         template.merge(velocityContext, stringWriter);
         renderer.setDocumentFromString(stringWriter.toString());

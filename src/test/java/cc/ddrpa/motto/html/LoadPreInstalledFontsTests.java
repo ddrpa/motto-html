@@ -1,13 +1,13 @@
 package cc.ddrpa.motto.html;
 
 import com.lowagie.text.DocumentException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Map;
 
 class LoadPreInstalledFontsTests {
 
@@ -22,14 +22,14 @@ class LoadPreInstalledFontsTests {
         DocumentBuilder builder = new DocumentBuilder();
         builder.loadTemplate("cjk-fonts.html");
         builder.merge(Map.of(
-            "font_families",
-            DocumentBuilder.listFontFamily()
-                .stream()
-                .filter(fontFamily -> !fontFamily.endsWith("-V"))
-                .sorted()
-                .toList()));
+                "font_families",
+                DocumentBuilder.listFontFamily()
+                        .stream()
+                        .filter(fontFamily -> !fontFamily.endsWith("-V"))
+                        .sorted()
+                        .toList()));
         try (FileOutputStream fileOutputStream = new FileOutputStream(
-            "target/font-book-sample.pdf")) {
+                "target/font-book-sample.pdf")) {
             builder.save(fileOutputStream);
         } catch (IOException | DocumentException e) {
             e.printStackTrace();

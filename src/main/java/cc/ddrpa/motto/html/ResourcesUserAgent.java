@@ -26,6 +26,11 @@ public class ResourcesUserAgent extends ITextUserAgent {
     private int httpConnectionConnectTimeoutInMills = 3000;
     private int httpConnectionReadTimeoutInMMills = 5000;
 
+    public ResourcesUserAgent(ITextOutputDevice outputDevice, int dotsPerPixel) {
+        super(outputDevice, dotsPerPixel);
+        this.dotsPerPixel = dotsPerPixel;
+    }
+
     /**
      * 设置远端资源（HTTP URL）连接超时时间，默认为 3 秒
      *
@@ -50,13 +55,8 @@ public class ResourcesUserAgent extends ITextUserAgent {
         return this;
     }
 
-    public ResourcesUserAgent(ITextOutputDevice outputDevice, int dotsPerPixel) {
-        super(outputDevice, dotsPerPixel);
-        this.dotsPerPixel = dotsPerPixel;
-    }
-
     @Override
-    protected URLConnection onHttpConnection(HttpURLConnection origin) throws MalformedURLException, IOException {
+    protected URLConnection onHttpConnection(HttpURLConnection origin) throws IOException {
         origin.setConnectTimeout(this.httpConnectionConnectTimeoutInMills);
         origin.setReadTimeout(this.httpConnectionReadTimeoutInMMills);
         return super.onHttpConnection(origin);

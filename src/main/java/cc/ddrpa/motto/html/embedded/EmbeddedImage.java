@@ -1,16 +1,13 @@
 package cc.ddrpa.motto.html.embedded;
 
+import org.xhtmlrenderer.pdf.ITextRenderer;
+
+import javax.imageio.ImageIO;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.Base64;
-import javax.imageio.ImageIO;
-import org.xhtmlrenderer.pdf.ITextRenderer;
 
 /**
  * 一种用于在文档中嵌入图像的的方案，实际上是将图像转换为 Base64 编码的字符串保存在 {@code <img>} 标签中
@@ -27,7 +24,7 @@ public class EmbeddedImage {
     private BufferedImage image;
 
     private EmbeddedImage(BufferedImage image, float dotsPerPoint, int dotsPerPixel,
-        int devicePixelRatio) {
+                          int devicePixelRatio) {
         this.dotsPerPoint = dotsPerPoint;
         this.dotsPerPixel = dotsPerPixel;
         this.devicePixelRatio = devicePixelRatio;
@@ -71,9 +68,9 @@ public class EmbeddedImage {
     public static EmbeddedImage newInstance(InputStream inputStream) throws IOException {
         BufferedImage image = ImageIO.read(inputStream);
         return new EmbeddedImage(image,
-            DEFAULT_DOTS_PER_POINT,
-            DEFAULT_DOTS_PER_PIXEL,
-            DEFAULT_DEVICE_PIXEL_RATIO);
+                DEFAULT_DOTS_PER_POINT,
+                DEFAULT_DOTS_PER_PIXEL,
+                DEFAULT_DEVICE_PIXEL_RATIO);
     }
 
     /**
@@ -84,9 +81,9 @@ public class EmbeddedImage {
      */
     public static EmbeddedImage newInstance(BufferedImage bufferedImage) {
         return new EmbeddedImage(bufferedImage,
-            DEFAULT_DOTS_PER_POINT,
-            DEFAULT_DOTS_PER_PIXEL,
-            DEFAULT_DEVICE_PIXEL_RATIO);
+                DEFAULT_DOTS_PER_POINT,
+                DEFAULT_DOTS_PER_PIXEL,
+                DEFAULT_DEVICE_PIXEL_RATIO);
     }
 
     /**
@@ -173,11 +170,11 @@ public class EmbeddedImage {
             if (image.getColorModel().hasAlpha()) {
                 ImageIO.write(this.image, "png", bos);
                 return String.format("data:image/png;base64,%s", Base64.getEncoder()
-                    .encodeToString(bos.toByteArray()));
+                        .encodeToString(bos.toByteArray()));
             } else {
                 ImageIO.write(this.image, "jpeg", bos);
                 return String.format("data:image/jpeg;base64,%s", Base64.getEncoder()
-                    .encodeToString(bos.toByteArray()));
+                        .encodeToString(bos.toByteArray()));
             }
         }
     }
@@ -235,7 +232,7 @@ public class EmbeddedImage {
         // 一种方法是通过转换去除 alpha 通道
         if (image.getColorModel().hasAlpha()) {
             BufferedImage newBufferedImage = new BufferedImage(image.getWidth(), image.getHeight(),
-                BufferedImage.TYPE_INT_RGB);
+                    BufferedImage.TYPE_INT_RGB);
             newBufferedImage.createGraphics().drawImage(image, 0, 0, null);
             ImageIO.write(newBufferedImage, "jpeg", outputStream);
         } else {
@@ -279,11 +276,11 @@ public class EmbeddedImage {
         int originalWidth = before.getWidth();
         int originalHeight = before.getHeight();
         BufferedImage after = new BufferedImage(targetWidthWithDPR, targetHeightWithDPR,
-            before.getType());
+                before.getType());
         AffineTransform scaleTransform = AffineTransform.getScaleInstance(
-            1.0 * targetWidthWithDPR / originalWidth, 1.0 * targetHeightWithDPR / originalHeight);
+                1.0 * targetWidthWithDPR / originalWidth, 1.0 * targetHeightWithDPR / originalHeight);
         AffineTransformOp scaleOp = new AffineTransformOp(scaleTransform,
-            AffineTransformOp.TYPE_BICUBIC);
+                AffineTransformOp.TYPE_BICUBIC);
         after = scaleOp.filter(before, after);
         this.image = after;
         return this;
